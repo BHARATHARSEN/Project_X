@@ -1,0 +1,24 @@
+{
+  "name": "project-x",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Ecommerce",
+  "main": "app.js",
+  "scripts": {
+    "start": "node backend/app.js",
+    "dev": "SET NODE_ENV=DEVELOPMENT& nodemon backend/app.js",
+    "prod": "SET NODE_ENV=PRODUCTION& nodemon backend/app.js",
+    "seeder": "node backend/seeder/seeder.js "
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.3",
+    "dotenv": "^16.4.5",
+    "mongoose": "^8.2.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
