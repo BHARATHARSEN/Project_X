@@ -209,3 +209,61 @@ export const updateProfile = catchAsyncErrors(async (req, res, next) => {
   })
 
 });
+
+export const allUsers = catchAsyncErrors(async (req, res, next) => {
+  const users = await User.find();
+
+  res.status(200).json({
+    users,
+  });
+});
+
+export const getUserDetails = catchAsyncErrors(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+
+  if(!user){
+    return next(new ErrorHandler(`User can't be found with id : ${req.params.id}`, 404))
+  }
+
+  res.status(200).json({
+    user,
+  });
+});
+
+// ================Admin Update User Details ====================
+
+export const updateUser = catchAsyncErrors(async (req, res, next) => {
+  const newUserData = {
+    name: req.body.name,
+    email: req.body.email,
+    role: req.body.role,
+  };
+  const user = await User.findByIdAndUpdate(req.params.id, newUserData, {
+    new: true,
+  });
+
+  res.status(200).json({
+    user,
+  });
+});
+
+//---------------------------------------------------------------------------
+
+export const deleteDetails = catchAsyncErrors(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+
+  if (!user) {
+    return next(
+      new ErrorHandler(`User can't be found with id : ${req.params.id}`, 404)
+    );
+  }
+
+  // TODO in future remove avatar from cloudinary
+
+  user.deleteOne();
+
+  res.status(200).json({
+    success : true
+  });
+});
+
