@@ -71,21 +71,6 @@ const orderSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    shippingAddress: {
-      type: Object,
-      required: true,
-      properties: {
-        fullName: {
-          type: String,
-          required: true,
-        },
-        addressLine1: {
-          type: String,
-          required: true,
-        },
-        // Add other address details like city, state, zip code, country
-      },
-    },
     taxAmount: {
       type: Number,
       required: true,
