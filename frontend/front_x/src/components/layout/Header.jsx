@@ -4,13 +4,21 @@ import avatar from '../../images/default_avatar.jpg';
 import Search from './Search.jsx';
 import { useGetMeQuery } from '../../redux/api/userApi.js';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom'; // Import Link component
+import { Link, useNavigate } from 'react-router-dom'; // Import Link component
+import { useLazyLogoutQuery } from '../../redux/api/authApi.js';
 
 const Header = () => {
 
-  const { isLoading } = useGetMeQuery();
+  const navigate = useNavigate()
 
+  const { isLoading } = useGetMeQuery();
+  const [logout, {data}] =useLazyLogoutQuery();
   const { user } = useSelector((state) => state.auth);
+
+  const logoutHandler = () => {
+    logout();
+    navigate(0)
+  };
 
   return (
     <nav className="navbar row">
@@ -44,26 +52,26 @@ const Header = () => {
               aria-expanded="false"
             >
               <figure className="avatar avatar-nav">
-                <img src={avatar} alt="User" className="rounded-circle" />
+                <img src={user?.avatar ? user?.avtar?.url : avatar} alt="User" className="rounded-circle" />
               </figure>
-              <span>User</span>
+              <span>{user.name}</span>
             </button>
             <div className="dropdown-menu w-100" aria-labelledby="dropDownMenuButton">
-              <a className="dropdown-item" href="/admin/dashboard">
+              <Link className="dropdown-item" to="/admin/dashboard">
                 Dashboard
-              </a>
+              </Link >
 
-              <a className="dropdown-item" href="/me/orders">
+              <Link  className="dropdown-item" to="/me/orders">
                 Orders
-              </a>
+              </Link >
 
-              <a className="dropdown-item" href="/me/profile">
+              <Link className="dropdown-item" to="/me/profile">
                 Profile
-              </a>
+              </Link >
 
-              <a className="dropdown-item text-danger" href="/">
+              <Link  className="dropdown-item text-danger" to="/" onClick = {logoutHandler}>
                 Logout
-              </a>
+              </Link>
             </div>
           </div>
         ) : (
