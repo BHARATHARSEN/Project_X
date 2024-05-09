@@ -11,7 +11,7 @@ const SideMenu = () => {
         },
         {
             name: "Update Profile",
-            url:"/me/update_profile",
+            url:"/me/update",
             icon: "fas fa-user",
         },
         {
