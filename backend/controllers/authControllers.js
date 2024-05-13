@@ -5,6 +5,7 @@ import sendToken from "../utils/sendToken.js";
 import crypto from "crypto";
 import {getResetPasswordTemplate} from "../utils/emailTemplates.js";
 import sendEmail from "../utils/sendEmail.js";
+import { upload_file } from "../utils/cloudinary.js";
 
 
 // ---------------------------------------------------------------------------------------------------------
@@ -55,6 +56,8 @@ export const loginUser = catchAsyncErrors(async(req,res,next) => {
   sendToken(user, 200, res);
 });
 
+// ==========================LOGOUT USER=======================
+
 export const logout = catchAsyncErrors(async (req, res, next) => {
   res.cookie("token", null, {
     expires: new Date(Date.now()),
@@ -67,9 +70,23 @@ export const logout = catchAsyncErrors(async (req, res, next) => {
 });
 
 
+// ==========================Upload AVATAR==============/API/V1/ME/UPLOAD_AVATAR=======
+
+export const uploadAvatar = catchAsyncErrors(async (req, res, next) => {
+  const avatarResponse = await upload_file(req.body.avatar, "Project_X/avatars")
+
+  const user = await User.findByIdAndUpdate(req?.user?._id, {
+    avatar : avatarResponse,
+  });
+  res.status(200).json({
+    user,
+  });
+});
 
 
-//-------------------------------------------------------------------------------------
+
+
+//-------------------------------FORGOT PASSWORD------------------------------------------------------
 
 
 
@@ -120,7 +137,7 @@ export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
   
 });
 
-// ----------------------------------------------------------------------------------------------------
+// --------------------------------RESET PASSWORD--------------------------------------------------------------------
 
 export const resetPassword = catchAsyncErrors(async (req, res, next) => {
 
@@ -249,7 +266,7 @@ export const updateUser = catchAsyncErrors(async (req, res, next) => {
 
 //---------------------------------------------------------------------------
 
-export const deleteDetails = catchAsyncErrors(async (req, res, next) => {
+export const deleteUser = catchAsyncErrors(async (req, res, next) => {
   const user = await User.findById(req.params.id);
 
   if (!user) {
