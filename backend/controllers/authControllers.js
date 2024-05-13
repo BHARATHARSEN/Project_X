@@ -70,7 +70,7 @@ export const logout = catchAsyncErrors(async (req, res, next) => {
 });
 
 
-// ==========================Upload AVATAR==============/API/V1/ME/UPLOAD_AVATAR=======
+// ==========================Upload AVATAR==============/API/V1/ME/UPLOAD_AVATAR=====
 
 export const uploadAvatar = catchAsyncErrors(async (req, res, next) => {
   const avatarResponse = await upload_file(req.body.avatar, "Project_X/avatars")
