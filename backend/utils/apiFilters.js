@@ -1,3 +1,5 @@
+import { query } from "express";
+
 class APIFilters {
     constructor(query, queryStr){
         this.query = query;
@@ -25,13 +27,30 @@ class APIFilters {
 
       //Fields to remove
 
-      const fieldsToRemove = ["keyword"];
+      const fieldsToRemove = ["keyword","page"];
       fieldsToRemove.forEach((el) => delete queryCopy[el]);
-      console.log(queryCopy);
+      
 
-      this.query = this.query.find(this.queryStr);
+      let queryStr = JSON.stringify(queryCopy);
+      queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g, (match) => `$${match}`);
+
+      console.log(queryStr);
+
+
+
+      this.query = this.query.find(JSON.parse(queryStr));
       // 'this' is current APIFilters object instance
       return this;
+    }
+
+    pagination(resPerPage){
+
+        const currentPage = Number(this.queryStr.page) || 1;
+        const skip = resPerPage * (currentPage - 1);
+
+        this.query = this.query.limit(resPerPage).skip(skip);
+        return this;
+
     }
 }
 
