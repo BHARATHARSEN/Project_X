@@ -35,10 +35,10 @@ export const userApi = createApi({
       invalidatesTags : ["User"],
     }),
 
-    updateAvatar : builder.mutation({
+    uploadAvatar : builder.mutation({
       query(body) {
         return {
-          url : "/me/update_avatar",
+          url : "/me/upload_avatar",
           method : "PUT",
           body,
         }
@@ -48,4 +48,4 @@ export const userApi = createApi({
   }),
 });
 
-export const { useGetMeQuery, useUpdateProfileMutation, useUpdateAvatarMutation} = userApi;
+export const { useGetMeQuery, useUpdateProfileMutation, useUploadAvatarMutation} = userApi;
