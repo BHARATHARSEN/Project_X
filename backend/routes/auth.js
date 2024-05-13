@@ -8,7 +8,7 @@ router.route("/login").post(loginUser);
 router.route("/logout").get(logout);
 router.route("/me").get(isAuthenticatedUser,getUserProfile);
 
-router.route("/me/upload_avatar").get(isAuthenticatedUser, uploadAvatar);
+router.route("/me/upload_avatar").put(isAuthenticatedUser, uploadAvatar);
 
 router.route("/password/update").put(isAuthenticatedUser, updatePassword);
 router.route("/me/update").put(isAuthenticatedUser, updateProfile);
