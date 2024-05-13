@@ -4,48 +4,58 @@ import { setIsAuthenticated, setLoading, setUser } from "../features/userSlice";
 export const userApi = createApi({
   reducerPath: "userApi", // slice name
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000/api/v1" }),
-  tagTypes : ["User"],
+  tagTypes: ["User"],
   endpoints: (builder) => ({
     getMe: builder.query({
-      query : () => `/me`,
-      transformResponse : (result) => result.user,
-      async onQueryStarted(args, {dispatch,queryFulfilled}){
+      query: () => `/me`,
+      transformResponse: (result) => result.user,
+      async onQueryStarted(args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          dispatch(setUser(data))
+          dispatch(setUser(data));
           dispatch(setIsAuthenticated(true));
           dispatch(setLoading(false));
-          
         } catch (error) {
           dispatch(setLoading(false));
           console.log(error);
         }
       },
-      providesTags : ["User"]
+      providesTags: ["User"],
     }),
 
-    updateProfile : builder.mutation({
+    updateProfile: builder.mutation({
       query(body) {
         return {
-          url : "/me/update",
-          method : "PUT",
+          url: "/me/update",
+          method: "PUT",
           body,
-        }
+        };
       },
-      invalidatesTags : ["User"],
+      invalidatesTags: ["User"],
     }),
 
-    uploadAvatar : builder.mutation({
+    uploadAvatar: builder.mutation({
       query(body) {
         return {
-          url : "/me/upload_avatar",
-          method : "PUT",
+          url: "/me/upload_avatar",
+          method: "PUT",
           body,
-        }
+        };
       },
-      invalidatesTags : ["User"],
-    })
+      invalidatesTags: ["User"],
+    }),
+
+    updatePassword: builder.mutation({
+      query(body) {
+        return {
+          url: "/password/update",
+          method: "PUT",
+          body,
+        };
+      },
+      invalidatesTags: ["User"],
+    }),
   }),
 });
 
-export const { useGetMeQuery, useUpdateProfileMutation, useUploadAvatarMutation} = userApi;
+export const { useGetMeQuery, useUpdateProfileMutation, useUploadAvatarMutation,useUpdatePasswordMutation} = userApi;
