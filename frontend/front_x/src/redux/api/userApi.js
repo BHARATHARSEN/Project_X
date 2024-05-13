@@ -33,7 +33,7 @@ export const userApi = createApi({
         }
       },
       invalidatesTags : ["User"],
-    })
+    }),
 
     updateAvatar : builder.mutation({
       query(body) {
