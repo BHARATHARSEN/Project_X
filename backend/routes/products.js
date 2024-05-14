@@ -13,7 +13,7 @@ router.route("/admin/products")
   .get(isAuthenticatedUser, authorizeRoles("admin"), getProducts);
 
   
-router.route("/products/:id").get(getProductDetails);
+router.route("/product/:id").get(getProductDetails);
 
 
 router
