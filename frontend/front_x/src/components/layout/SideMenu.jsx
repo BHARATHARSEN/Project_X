@@ -40,9 +40,9 @@ const SideMenu = () => {
             <Link
               key={index}
               to={menuItem.url}
-              className={`fw-bold list-group-item list-group-item-action ${activeMenuItem.includes(menuItem.url) ? "active" : ""}`}
+              className={`fw-bold list-group-item list-group-item-action ${activeMenuItem === menuItem.url ? "active" : ""}`}
               onClick = {() => handleMenuClick(menuItem.url)} 
-              aria-current = {activeMenuItem.includes(menuItem.url) ? "true" : "false"}
+              aria-current = {activeMenuItem === menuItem.url ? "true" : "false"}
             >
               <i className={`${menuItem.icon} fa-fw pe-2`}></i> {menuItem.name}
             </Link>
