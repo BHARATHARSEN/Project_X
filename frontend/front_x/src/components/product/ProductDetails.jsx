@@ -13,6 +13,9 @@ const ProductDetails = () => {
   const {data, isLoading, error, isError} = useGetProductDetailsQuery(id);
   const product = data?.product ;
 
+
+  const [quantity, setQuantity] = useState(1);
+
   const [activeImg, setActiveImg] = useState("");
   useEffect(() => {
     setActiveImg(product?.images[0] ? product?.images[0]?.url : {defaultImage} );
@@ -24,6 +27,24 @@ const ProductDetails = () => {
       toast.error(error?.data?.message);
     }
   },[isError]);
+
+  const increaseQty = () => {
+    const count = document.querySelector(".count");
+
+    if(count.valueAsNumber >= product.stock) return;
+
+    const qty = count.valueAsNumber + 1 ;
+    setQuantity(qty)
+  }
+
+  const decreaseQty = () => {
+    const count = document.querySelector(".count");
+
+    if(count.valueAsNumber <= 1) return;
+
+    const qty = count.valueAsNumber - 1 ;
+    setQuantity(qty)
+  }
 
   if(isLoading) return <Loader />;
   
@@ -79,14 +100,14 @@ const ProductDetails = () => {
 
         <p id="product_price">$ {product?.price}</p>
         <div className="stockCounter d-inline">
-          <span className="btn btn-danger minus">-</span>
+          <span className="btn btn-danger minus" onClick={decreaseQty}>-</span>
           <input
             type="number"
             className="form-control count d-inline"
-            value="1"
+            value={quantity}
             readonly
           />
-          <span className="btn btn-primary plus">+</span>
+          <span className="btn btn-primary plus" onClick={increaseQty}>+</span>
         </div>
         <button
           type="button"
