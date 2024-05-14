@@ -73,7 +73,7 @@ export const logout = catchAsyncErrors(async (req, res, next) => {
 // ==========================Upload AVATAR==============/API/V1/ME/UPLOAD_AVATAR=====
 
 export const uploadAvatar = catchAsyncErrors(async (req, res, next) => {
-  const avatarResponse = await upload_file(req.body.avatar, "Project_X/avatars")
+  const avatarResponse = await upload_file(req.body.avatar, "Project_X/avatars");
 
   const user = await User.findByIdAndUpdate(req?.user?._id, {
     avatar : avatarResponse,
@@ -107,7 +107,7 @@ export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
   await user.save();
 
   // creating user reset password URL
-  const resetUrl = `${process.env.FRONTEND_URL}/api/v1/password/reset/${resetToken}`;
+  const resetUrl = `${process.env.FRONTEND_URL}/password/reset/${resetToken}`;
 
   const message = getResetPasswordTemplate(user?.name, resetUrl);
 
@@ -164,6 +164,8 @@ export const resetPassword = catchAsyncErrors(async (req, res, next) => {
       )
     );
   }
+
+  console.log(req.body)
     // setting the new password
   user.password = req.body.password;
 
