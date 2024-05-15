@@ -1,69 +1,64 @@
 import React from 'react';
 import MetaData from '../layout/MetaData';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { removeCartItem, setCartItem } from '../../redux/features/cartSlice';
 import toast from 'react-hot-toast';
 
 const Cart = () => {
-
-  const { cartItems} = useSelector((state) => state.cart);
+  const { cartItems } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
+  const increaseQty = (item, quantity) => {
+    const newQty = quantity + 1;
 
+    if (newQty > item?.stock) return;
 
-const increaseQty = (item, quantity) => {
-    
-    const newQty = quantity + 1
-
-    if(newQty > item?.stock) return;
-
-    setItemToCart(item, newQty)
-  }
+    setItemToCart(item, newQty);
+  };
 
   const decreaseQty = (item, quantity) => {
-    
-    const newQty = quantity - 1
+    const newQty = quantity - 1;
 
-    if(newQty <= 0) return;
+    if (newQty <= 0) return;
 
-    setItemToCart(item, newQty)
-  }
-
-  // Set item to CART function which sends the model of the cart and dispatches the item to cart state
+    setItemToCart(item, newQty);
+  };
 
   const setItemToCart = (item, newQty) => {
     const cartItem = {
-      product : item?.product,
-      name : item?.name,
-      price : item?.price,
-      image : item?.image,
-      stock : item?.stock,
-      quantity : newQty,
+      product: item?.product,
+      name: item?.name,
+      price: item?.price,
+      image: item?.image,
+      stock: item?.stock,
+      quantity: newQty,
     };
 
     dispatch(setCartItem(cartItem));
-    toast.success("Quantity changed successfully to your cart.")
+    toast.success('Quantity changed successfully to your cart.');
   };
 
   const removeCartItemHandler = (id) => {
-    dispatch(removeCartItem(id))
+    dispatch(removeCartItem(id));
+  };
 
-  }
+  const checkoutHandler = () => {
+    navigate("/shipping");
+  };
 
-
-  
-return (
+  return (
     <>
-      <MetaData title={"Your Cart"} />
-      {cartItems?.length === 0 ? (
+      <MetaData title={'Your Cart'} />
+      {cartItems?.length === 0? (
         <h2 className="mt-5">Your Cart is empty</h2>
       ) : (
         <>
           <h2 className="mt-5">
             Your Cart: <b>{cartItems?.length} items</b>
           </h2>
-  
+
           <div className="row d-flex justify-content-between">
             <div className="col-12 col-lg-8">
               {cartItems?.map((item) => (
@@ -109,19 +104,19 @@ return (
                 </>
               ))}
             </div>
-  
+
             <div className="col-12 col-lg-3 my-4">
               <div id="order_summary">
                 <h4>Order Summary</h4>
                 <hr />
                 <p>
-                  Units: <span className="order-summary-values">{cartItems?.reduce((acc, item) => acc + item?.quantity , 0)}{" "}(Units)</span>
+                  Units: <span className="order-summary-values">{cartItems?.reduce((acc, item) => acc + item?.quantity, 0)}{" "}(Units)</span>
                 </p>
                 <p>
-                  Est. total: <span className="order-summary-values">$ {cartItems?.reduce((acc, item) => acc + item?.quantity * item?.price , 0).toFixed(2)}</span>
+                  Est. total: <span className="order-summary-values">$ {cartItems?.reduce((acc, item) => acc + item?.quantity * item?.price, 0).toFixed(2)}</span>
                 </p>
                 <hr />
-                <button id="checkout_btn" className="btn btn-primary w-100">
+                <button id="checkout_btn" className="btn btn-primary w-100" onClick={checkoutHandler}>
                   Check out
                 </button>
               </div>
@@ -131,8 +126,6 @@ return (
       )}
     </>
   );
-  
-
 };
 
 export default Cart;
