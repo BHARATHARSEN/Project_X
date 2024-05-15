@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useUpdateProfileMutation } from '../../redux/api/userApi';
 import { useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
+import MetaData from '../layout/MetaData';
 
 const UpdateUser = () => {
   const [email, setEmail] = useState("");
@@ -41,6 +42,9 @@ const UpdateUser = () => {
   };
 
   return (
+    <>
+    <MetaData title = {"Update Profile"}/>
+    
     <UserLayout>
       <div className="row wrapper">
         <div className="col-10 col-lg-8">
@@ -85,6 +89,7 @@ const UpdateUser = () => {
         </div>
       </div>
     </UserLayout>
+    </>
   );
 };
 
