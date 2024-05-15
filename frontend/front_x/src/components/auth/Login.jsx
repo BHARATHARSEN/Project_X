@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useLoginMutation } from '../../redux/api/authApi';
 import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import MetaData from '../layout/MetaData';
 
 const Login = () => {
 
@@ -39,6 +40,8 @@ const Login = () => {
   };
 
   return (
+    <>
+    <MetaData title={"Login"}/>
     <div className="row wrapper">
       <div className="col-10 col-lg-5">
         <form className="shadow rounded bg-body" onSubmit={submitHandler}>
@@ -85,13 +88,14 @@ const Login = () => {
           </button>
 
           <div className="my-3">
-            <a href="/register" className="float-end">
+            <Link to="/register" className="float-end">
               New User?
-            </a>
+            </Link>
           </div>
         </form>
       </div>
     </div>
+    </>
   );
 };
 
