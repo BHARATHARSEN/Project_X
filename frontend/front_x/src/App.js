@@ -59,7 +59,14 @@ function App() {
               }
             />
             <Route path="/cart" element={<Cart />} />
-            <Route path="/shipping" element={<Shipping />} />
+            <Route
+              path="/shipping"
+              element={
+                <ProtectedRoute>
+                  <Shipping />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/me/update" element={<UpdateUser />} />
           </Routes>
         </div>
