@@ -2,9 +2,12 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import StarRatings from 'react-star-ratings';
 import defaultImage from '../../images/default_product.png';
+import MetaData from '../layout/MetaData';
 
 export const ProductItem = ({product, columnSize}) => {
   return (
+    <>
+    <MetaData title={product?.name}/>
     <div className={`col-sm-12 col-md-6 col-lg-${columnSize} my-3`}>
       <div className="card p-3 rounded">
         <img
@@ -40,6 +43,8 @@ export const ProductItem = ({product, columnSize}) => {
         </div>
       </div>
     </div>
+    
+    </>
   );
 };
 
