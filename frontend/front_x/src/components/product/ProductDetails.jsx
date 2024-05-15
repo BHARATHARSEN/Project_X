@@ -5,33 +5,47 @@ import {useParams} from "react-router-dom";
 import toast from 'react-hot-toast'
 import Loader from '../layout/Loader.jsx';
 import StarRatings from 'react-star-ratings';
+import { useDispatch } from 'react-redux';
+import { setCartItem } from '../../redux/features/cartSlice.js';
+import MetaData from '../layout/MetaData.jsx';
 
 const ProductDetails = () => {
   const params = useParams();
   const {id} =params;
   console.log(params?.id)
-  const {data, isLoading, error, isError} = useGetProductDetailsQuery(id);
+
+  const dispatch = useDispatch();
+  
+  
+  const [quantity, setQuantity] = useState(1);
+  
+  const [activeImg, setActiveImg] = useState("");
+  
+  
+  const {data, isLoading, error, isError} = useGetProductDetailsQuery(params?.id);
   const product = data?.product ;
 
-
-  const [quantity, setQuantity] = useState(1);
-
-  const [activeImg, setActiveImg] = useState("");
   useEffect(() => {
     setActiveImg(product?.images[0] ? product?.images[0]?.url : {defaultImage} );
 
 
   },[product])
+
+
   useEffect(() => {
     if(isError){
       toast.error(error?.data?.message);
     }
   },[isError]);
 
+
+
+
+
   const increaseQty = () => {
     const count = document.querySelector(".count");
 
-    if(count.valueAsNumber >= product.stock) return;
+    if(count.valueAsNumber >= product?.stock) return;
 
     const qty = count.valueAsNumber + 1 ;
     setQuantity(qty)
@@ -46,10 +60,28 @@ const ProductDetails = () => {
     setQuantity(qty)
   }
 
+  // Set item to CART function which sends the model of the cart and dispatches the item to cart state
+
+  const setItemToCart = () => {
+    const cartItem = {
+      product : product?._id,
+      name : product?.name,
+      price : product?.price,
+      image : product?.images[0]?.url,
+      stock : product?.stock,
+      quantity
+    };
+
+    dispatch(setCartItem(cartItem));
+    toast.success("Added successfully to your cart.")
+  };
+
   if(isLoading) return <Loader />;
   
   return (
-    <div className="row d-flex justify-content-around">
+    <>
+    <MetaData title={product?.name}/>
+     <div className="row d-flex justify-content-around">
       <div className="col-12 col-lg-5 img-fluid" id="product_image">
         <div className="p-3">
           <img
@@ -113,7 +145,8 @@ const ProductDetails = () => {
           type="button"
           id="cart_btn"
           className="btn btn-primary d-inline ms-4"
-          disabled=""
+          disabled={product?.stock <= 0}
+          onClick={setItemToCart}
         >
           Add to Cart
         </button>
@@ -139,6 +172,8 @@ const ProductDetails = () => {
         </div>
       </div>
     </div>
+    </>
+    
   )
 }
 
