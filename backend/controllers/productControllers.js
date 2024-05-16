@@ -6,14 +6,16 @@ import Product from "../models/product.js";
 import ErrorHandler from "../utils/errorHandler.js";
 import APIFilters from "../utils/apiFilters.js";
 
-export const getProducts = catchAsyncErrors(async (req,res) => {
+export const getProducts = catchAsyncErrors(async (req,res,next) => {
     const resPerPage = 4;
-
-
     const apiFilters = new APIFilters (Product, req.query).search().filters();
+    console.log("req?.user", req.user)
 
     let products = await apiFilters.query;
     let filteredProductsCount = products.length;
+
+    // return next(new ErrorHandler("Error", 400))
+
 
     apiFilters.pagination(resPerPage);
     products = await apiFilters.query.clone();
@@ -28,21 +30,27 @@ export const getProducts = catchAsyncErrors(async (req,res) => {
 // create  a new product  /api/v1/admin/products
 
 export const newProduct = catchAsyncErrors (async (req, res) => {
-  
-    const product = await Product.create(req.body)
+  req.body.user = req.user._id;
+  const product = await Product.create(req.body);
 
-    res.status(200).json({product,})
+  res.status(200).json({ product });
+
+
+    
 });
 
 // get a single product  /api/v1/products/:id
 
 export const getProductDetails = catchAsyncErrors(async (req, res, next) => {
   
-    const product = await Product.findById(req?.params.id)
+  
+    const product = await Product.findById(req?.params?.id)
+    console.log(product)
 
     if(!product){
         return next(new ErrorHandler('Product is not found', 404));
     }
+    console.log({product,})
 
     res.status(200).json({product,});
 });
