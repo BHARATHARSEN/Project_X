@@ -5,6 +5,7 @@ export const productApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000/api/v1" }),
   keepUnusedDataFor: 30,
   endpoints: (builder) => ({
+    
     getProducts: builder.query({
       query: (params) => ({
         url: "/products",
