@@ -1,19 +1,29 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const orderApi = createApi({
   reducerPath: "orderApi", // slice name
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000/api/v1" }),
   endpoints: (builder) => ({
     createNewOrder: builder.mutation({
-      query (body) {
+      query(body) {
         return {
-            url: "/orders/new",
-            method: "POST",
-            body,
+          url: "/orders/new",
+          method: "POST",
+          body,
+        };
+      },
+    }),
+
+    stripeCheckoutSession: builder.mutation({
+      query(body) {
+        return {
+          url: "/payment/checkout_session",
+          method: "POST",
+          body,
         };
       },
     }),
   }),
 });
 
-export const { useCreateNewOrderMutation } = orderApi;
+export const { useCreateNewOrderMutation, useStripeCheckoutSessionMutation } = orderApi;
