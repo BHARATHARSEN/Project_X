@@ -33,7 +33,7 @@ const ConfirmOrder = () => {
                     <h4 className="mt-4">Your Cart Items:</h4>
 
                     {cartItems?.map((item) => (
-                        <>
+                        <React.Fragment key= {item?.product}>
 
                             <hr />
                             <div className="cart-item my-1">
@@ -57,7 +57,7 @@ const ConfirmOrder = () => {
                                 </div>
                             </div>
                             <hr />
-                        </>
+                        </React.Fragment>
                     ))}
 
                 </div>
