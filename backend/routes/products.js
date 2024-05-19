@@ -1,7 +1,7 @@
 import express from 'express';
 import { deleteProduct, getProductDetails, getProducts, newProduct, updateProduct } from "../controllers/productControllers.js";
 import { isAuthenticatedUser,authorizeRoles } from '../middlewares/auth.js';
-import { createProductReview, deleteReview, getProductReviews } from '../controllers/orderControllers.js';
+import { createProductReview, deleteReview, getProductReviews } from '../controllers/productControllers.js';
 const router = express.Router();
 
 router.route("/products").get(getProducts);
