@@ -3,6 +3,7 @@ import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 export const productApi = createApi({
   reducerPath: "productApi", // slice name
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000/api/v1" }),
+  tagTypes:["Product"],
   keepUnusedDataFor: 30,
   endpoints: (builder) => ({
     getProducts: builder.query({
@@ -20,6 +21,7 @@ export const productApi = createApi({
     }),
     getProductDetails: builder.query({
       query: (id) => `/product/${id}`,
+      providesTags: ["Product"]
     }),
 
     submitReview: builder.mutation({
@@ -30,6 +32,7 @@ export const productApi = createApi({
           body,
         };
       },
+      invalidatesTags : ["Product"],
     }),
   }),
 });
