@@ -40,7 +40,7 @@ const PaymentMethod = () => {
         }
 
         if (isOrderSuccess) {
-            navigate("/order_success"); // Adjust this route as needed
+            navigate("/me/orders?order_success=true"); // Adjust this route as needed
         }
     }, [createOrderError, isOrderSuccess, navigate]);
 
