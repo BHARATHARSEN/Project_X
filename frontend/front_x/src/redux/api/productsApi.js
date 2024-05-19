@@ -5,7 +5,6 @@ export const productApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000/api/v1" }),
   keepUnusedDataFor: 30,
   endpoints: (builder) => ({
-    
     getProducts: builder.query({
       query: (params) => ({
         url: "/products",
@@ -15,16 +14,25 @@ export const productApi = createApi({
           category: params?.category,
           "price[gte]": params.min,
           "price[lte]": params.max,
-          "ratings[gte]": params?.ratings
-          
+          "ratings[gte]": params?.ratings,
         },
       }),
     }),
     getProductDetails: builder.query({
       query: (id) => `/product/${id}`,
     }),
+
+    submitReview: builder.mutation({
+      query(body) {
+        return {
+          url: "/reviews",
+          method: "PUT",
+          body,
+        };
+      },
+    }),
   }),
 });
 
 
-export const { useGetProductsQuery, useGetProductDetailsQuery } = productApi ;
+export const { useGetProductsQuery, useGetProductDetailsQuery, useSubmitReviewMutation } = productApi ;
