@@ -263,9 +263,9 @@ const Invoice = () => {
                 </tr>
               </thead>
               <tbody>
-                {orderItems?.map((item) => (
+                {orderItems?.map((item, index) => (
                   <>
-                    <tr>
+                    <tr key={index}>
                       <td class="service">1</td>
                       <td class="desc">{item?.name}</td>
                       <td class="unit">${item?.price}</td>
