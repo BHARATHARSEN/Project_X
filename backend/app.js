@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import { connectDatabase } from "./config/dbConnect.js";
 import errorMiddleware from "../backend/middlewares/error.js";
+import bodyParser from "body-parser";
+import cors from "cors";
 
 
 // Handle unhcaught exceptions
@@ -19,9 +21,18 @@ dotenv.config({ path: "backend/config/config.env"})
 
 connectDatabase();
 
-app.use(express.json({ limit: "10mb", verify : (req,res,buf) => {
-  req.rawBody = buf.toString();
-}, }));
+// app.use(express.json({ limit: "10mb" }));
+
+app.use((req, res, next) => {
+  console.log("ORIGINAL URL ", req.originalUrl)
+  if (req.originalUrl === "/api/v1/payment/webhook") {
+    // next();
+    express.raw({ type: "application/json" })(req, res, next);
+  } else {
+    express.json({limit: "10mb"})(req, res, next); 
+  }
+});
+
 app.use(cookieParser());
 
 import productRoutes from './routes/products.js';
