@@ -1,24 +1,23 @@
-import React from 'react';
-import px1 from '../../images/px1.png';
-import avatar from '../../images/default_avatar.jpg';
-import Search from './Search.jsx';
-import { useGetMeQuery } from '../../redux/api/userApi.js';
-import { useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom'; // Import Link component
-import { useLazyLogoutQuery } from '../../redux/api/authApi.js';
+import React from "react";
+import px1 from "../../images/px1.png";
+import avatar from "../../images/default_avatar.jpg";
+import Search from "./Search.jsx";
+import { useGetMeQuery } from "../../redux/api/userApi.js";
+import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom"; // Import Link component
+import { useLazyLogoutQuery } from "../../redux/api/authApi.js";
 
 const Header = () => {
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const { isLoading } = useGetMeQuery();
-  const [logout] =useLazyLogoutQuery();
+  const [logout] = useLazyLogoutQuery();
   const { user } = useSelector((state) => state.auth);
   const { cartItems } = useSelector((state) => state.cart);
 
   const logoutHandler = () => {
     logout();
-    navigate(0)
+    navigate(0);
   };
 
   return (
@@ -34,7 +33,7 @@ const Header = () => {
         <Search />
       </div>
       <div className="col-12 col-md-3 mt-4 mt-md-0 text-center">
-        <a href="/cart" style={{ textDecoration: 'none' }}>
+        <a href="/cart" style={{ textDecoration: "none" }}>
           <span id="cart" className="ms-3">
             Cart
           </span>
@@ -53,24 +52,37 @@ const Header = () => {
               aria-expanded="false"
             >
               <figure className="avatar avatar-nav">
-                <img src={user?.avatar ? user?.avatar?.url : avatar} alt="User" className="rounded-circle" />
+                <img
+                  src={user?.avatar ? user?.avatar?.url : avatar}
+                  alt="User"
+                  className="rounded-circle"
+                />
               </figure>
               <span>{user.name}</span>
             </button>
-            <div className="dropdown-menu w-100" aria-labelledby="dropDownMenuButton">
-              <Link className="dropdown-item" to="/admin/dashboard">
-                Dashboard
-              </Link >
+            <div
+              className="dropdown-menu w-100"
+              aria-labelledby="dropDownMenuButton"
+            >
+              {user?.role === "admin" && (
+                <Link className="dropdown-item" to="/admin/dashboard">
+                  Dashboard
+                </Link>
+              )}
 
-              <Link  className="dropdown-item" to="/me/orders">
+              <Link className="dropdown-item" to="/me/orders">
                 Orders
-              </Link >
+              </Link>
 
               <Link className="dropdown-item" to="/me/profile">
                 Profile
-              </Link >
+              </Link>
 
-              <Link  className="dropdown-item text-danger" to="/" onClick = {logoutHandler}>
+              <Link
+                className="dropdown-item text-danger"
+                to="/"
+                onClick={logoutHandler}
+              >
                 Logout
               </Link>
             </div>
