@@ -198,18 +198,25 @@ export const deleteReview = catchAsyncErrors(async (req, res, next) => {
 
 // Can user give a review  => /api/v1/can_review
 
-export const canUserReview = catchAsyncErrors(async (req, res) => {
-  
-  const orders = await Order.find({
-    user : req.user._id,
-    "orderItems.product": req.product.productId,
-  });
+export const canUserReview = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const userId = req.user._id;
+    const productId = req.query.productId;
 
-  if(orders.length === 0){
-    res.status(200).json({canReviewed :false});
+    console.log("User ID:", userId);
+    console.log("Product ID:", productId);
+
+    const orders = await Order.find({
+      user: userId,
+      "orderItems.product": productId,
+    });
+
+    const canReview = orders.length > 0;
+
+    res.status(200).json({ canReview });
+  } catch (error) {
+    next(error);
   }
-
-  res.status(200).json({ canReviewed: true });
 });
 
 
