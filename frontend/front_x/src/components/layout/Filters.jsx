@@ -139,7 +139,7 @@ const Filters = () => {
             onChange={(e) => handleClick(e.target)}
             
           />
-          <label className="form-check-label" for="check7">
+          <label className="form-check-label" htmlFor="check7">
             <StarRatings
               rating={rating}
               starRatedColor="#ffb829"
