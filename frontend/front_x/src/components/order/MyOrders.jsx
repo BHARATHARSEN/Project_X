@@ -30,12 +30,7 @@ const MyOrders = () => {
   const orderSuccess = searchParams.get("order_success");
   const navigate = useNavigate();
 
-  // Example useEffect for additional side effects (logging, analytics, etc.)
-  useEffect(() => {
-    if (data?.orders?.length > 0) {
-      console.log('Orders have been loaded');
-    }
-  }, [data?.orders]);
+
 
   useEffect(() => {
     if (error) {
@@ -47,7 +42,7 @@ const MyOrders = () => {
         dispatch(clearCart());
         navigate("/me/orders");
     }
-  }, [error, orderSuccess]);
+  }, [error, orderSuccess,dispatch, navigate]);
 
   if(isLoading) return <Loader /> ;
 
@@ -126,16 +121,7 @@ const MyOrders = () => {
           striped
           bordered
           hover
-          small
-          responsive
-          maxHeight="300px"
-          entries={5}
-          entriesOptions={[5, 10, 20]}
-          pagination
-          searching
           searchLabel="Search orders"
-          displayEntries
-          fixedHeader
           data={setOrders()}
           className="px-3"
         />
