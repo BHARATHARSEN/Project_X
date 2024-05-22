@@ -42,7 +42,7 @@ const isPaid = paymentInfo?.status === "paid" ? true : false ;
         <div className="col-12 col-lg-9 mt-5 order-details">
           <div className="d-flex justify-content-between align-items-center">
             <h3 className="mt-5 mb-4">Your Order Details</h3>
-            <a className="btn btn-success" href="/invoice/order/order-id">
+            <a className="btn btn-success" href={`/invoice/order/${order?._id}`}>
               <i className="fa fa-print"></i> Invoice
             </a>
           </div>
@@ -120,9 +120,9 @@ const isPaid = paymentInfo?.status === "paid" ? true : false ;
 
           <hr />
           <div className="cart-item my-1">
-            {orderItems?.map((item) => (
+            {orderItems?.map((item, index) => (
               <>
-                <div className="row my-5">
+                <div key = {index} className="row my-5">
                   <div className="col-4 col-lg-2">
                     <img
                       src={item.image}
@@ -133,7 +133,7 @@ const isPaid = paymentInfo?.status === "paid" ? true : false ;
                   </div>
 
                   <div className="col-5 col-lg-5">
-                    <Link to={`/products/${item?.product}`}>{item?.name}</Link>
+                    <Link to={`/product/${item?.product}`}>{item?.name}</Link>
                   </div>
 
                   <div className="col-4 col-lg-2 mt-4 mt-lg-0">
