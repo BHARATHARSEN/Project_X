@@ -368,7 +368,7 @@ const ProductDetails = () => {
           <p>{product?.description}</p>
           <hr />
           <p id="product_seller mb-3">
-            Sold by: <strong>Tech</strong>
+            Sold by: <strong>{product?.seller}</strong>
           </p>
 
           {isAuthenticated ? (
