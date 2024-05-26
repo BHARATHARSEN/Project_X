@@ -7,7 +7,7 @@ const seedProducts = async () => {
         await mongoose.connect("mongodb://127.0.0.1:27017/Project_X");
 
         await Product.deleteMany()
-            console.log("Products are deleted")
+        console.log("Products are deleted")
 
         await Product.insertMany(products);
         console.log("Products are added");
@@ -15,7 +15,7 @@ const seedProducts = async () => {
         process.exit();
         
     } catch (error) {
-        console.log(error.msg);
+        console.log(error.message);
         process.exit();
 
     }
