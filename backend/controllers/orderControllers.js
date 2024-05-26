@@ -73,8 +73,46 @@ export const allOrders = catchAsyncErrors(async (req, res, next) => {
 
 
 
-export const updateOrder = catchAsyncErrors(async (req, res, next) => {
+// export const updateOrder = catchAsyncErrors(async (req, res, next) => {
 
+//   const order = await Order.findById(req.params.id);
+
+//   if (!order) {
+//     return next(new ErrorHandler("No order found", 404));
+//   }
+
+//   if (order?.orderStatus === "Delivered") {
+//     return next(new ErrorHandler("Order has been delivered", 400));
+//   }
+
+//   // Update products stock
+
+//   order?.orderItems?.forEach(async (item) => {
+
+//     const product = await Product.findById(item?.product?.toString());
+
+//     if(!product){
+//         return next(new ErrorHandler("No PRODUCT FOUND", 404));
+//     }
+
+//     // await Product.findOneAndUpdate(product._id, {stock: product.stock - item.quantity})
+//     product.stock = product.stock - item.quantity;
+//     await product.save({validateBeforeSave : false});
+//   });
+
+//   order.orderStatus = req.body.status ;
+//   order.deliveredAt = Date.now();
+
+//   await order.save();
+
+
+
+//   res.status(200).json({
+//     success : true,
+//   });
+// });
+
+export const updateOrder = catchAsyncErrors(async (req, res, next) => {
   const order = await Order.findById(req.params.id);
 
   if (!order) {
@@ -82,35 +120,36 @@ export const updateOrder = catchAsyncErrors(async (req, res, next) => {
   }
 
   if (order?.orderStatus === "Delivered") {
-    return next(new ErrorHandler("Order has been delivered", 400));
+    return next(new ErrorHandler("Order has already been delivered", 400));
   }
 
-  // Update products stock
-
-  order?.orderItems?.forEach(async (item) => {
-
+  // Update product stock
+  for (let item of order?.orderItems) {
     const product = await Product.findById(item?.product?.toString());
 
-    if(!product){
-        return next(new ErrorHandler("No product found", 404));
+    if (!product) {
+      // Log the missing product but don't stop the process
+      console.error(`Product not found: ${item?.product}`);
+      continue; // Skip to the next item
     }
 
-    // await Product.findOneAndUpdate(product._id, {stock: product.stock - item.quantity})
-    product.stock = product.stock - item.quantity;
-    await product.save({validateBeforeSave : false});
-  });
+    product.stock -= item.quantity;
+    await product.save({ validateBeforeSave: false });
+  }
 
-  order.orderStatus = req.body.status ;
-  order.deliveredAt = Date.now();
+  order.orderStatus = req.body.status;
+
+  if (req.body.status === "Delivered") {
+    order.deliveredAt = Date.now();
+  }
 
   await order.save();
 
-
-
   res.status(200).json({
-    success : true,
+    success: true,
   });
 });
+
 
 // Delete ORDER
 
