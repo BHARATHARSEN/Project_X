@@ -5,29 +5,35 @@ import Loader from "../layout/Loader";
 import { Link } from "react-router-dom";
 import MetaData from "../layout/MetaData";
 import AdminLayout from "../layout/AdminLayout";
-import { useGetAdminOrdersQuery } from "../../redux/api/orderApi";
+import {
+  useDeleteOrderMutation,
+  useGetAdminOrdersQuery,
+} from "../../redux/api/orderApi";
 
 const ListOrders = () => {
   const { data, isLoading, error } = useGetAdminOrdersQuery();
+
+  const [
+    deleteOrder,
+    { error: deleteError, isSuccess, isLoading: isDeleteLoading },
+  ] = useDeleteOrderMutation();
 
   useEffect(() => {
     if (error) {
       toast.error(error?.data?.message);
     }
 
-    // if (deleteError) {
-    //   toast.error(deleteError?.data?.message);
-    // }
-    // if(isSuccess) {
-    //   toast.success("Product is deleted");
-    // }
-  }, [error]);
+    if (deleteError) {
+      toast.error(deleteError?.data?.message);
+    }
+    if (isSuccess) {
+      toast.success("Order is deleted");
+    }
+  }, [error, deleteError, isSuccess]);
 
-  //   const deleteProductHandler = (id) => {
-
-  //     deleteProduct(id);
-
-  //   }
+  const deleteOrderHandler = (id) => {
+    deleteOrder(id);
+  };
 
   if (isLoading) return <Loader />;
 
@@ -74,8 +80,8 @@ const ListOrders = () => {
 
             <button
               className="btn btn-outline-danger ms-2"
-            //   onClick={() => deleteProductHandler(order?._id)}
-            //   disabled={isDeleteLoading}
+              onClick={() => deleteOrderHandler(order?._id)}
+              disabled={isDeleteLoading}
             >
               <i className="fa fa-trash"></i>
             </button>
