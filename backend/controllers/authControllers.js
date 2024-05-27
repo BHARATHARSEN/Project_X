@@ -5,7 +5,7 @@ import sendToken from "../utils/sendToken.js";
 import crypto from "crypto";
 import {getResetPasswordTemplate} from "../utils/emailTemplates.js";
 import sendEmail from "../utils/sendEmail.js";
-import { upload_file } from "../utils/cloudinary.js";
+import { delete_file, upload_file } from "../utils/cloudinary.js";
 
 
 // ---------------------------------------------------------------------------------------------------------
@@ -266,23 +266,34 @@ export const updateUser = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-//---------------------------------------------------------------------------
+//--------------------DELETE USER-------------------------------------------------------
 
 export const deleteUser = catchAsyncErrors(async (req, res, next) => {
   const user = await User.findById(req.params.id);
 
   if (!user) {
     return next(
-      new ErrorHandler(`User can't be found with id : ${req.params.id}`, 404)
+      new ErrorHandler(`User can't be found with id: ${req.params.id}`, 404)
     );
   }
 
-  // TODO in future remove avatar from cloudinary
+  // Remove avatar from cloudinary if it exists
+  try {
+    if (user.avatar && user.avatar.public_id) {
+      await delete_file(user.avatar.public_id);
+    }
+  } catch (error) {
+    return next(
+      new ErrorHandler("Failed to delete avatar from cloudinary", 500)
+    );
+  }
 
-  user.deleteOne();
+  // Remove the user from the database
+  await user.deleteOne();
 
   res.status(200).json({
-    success : true
+    success: true,
+    message: "User has been deleted successfully",
   });
 });
 
