@@ -98,6 +98,8 @@ const ListUsers = () => {
     return users;
   };
 
+  if(isLoading) return <Loader/>
+
   return (
     <AdminLayout>
       <MetaData title={"All Users"} />
