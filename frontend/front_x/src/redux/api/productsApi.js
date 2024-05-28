@@ -3,7 +3,7 @@ import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 export const productApi = createApi({
   reducerPath: "productApi", // slice name
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000/api/v1" }),
-  tagTypes: ["Product", "AdminProducts"],
+  tagTypes: ["Product", "AdminProducts", "Reviews"],
   keepUnusedDataFor: 30,
   endpoints: (builder) => ({
     getProducts: builder.query({
@@ -41,7 +41,7 @@ export const productApi = createApi({
 
     getAdminProducts: builder.query({
       query: () => `/admin/products`,
-      providesTags: ["Adminproducts"],
+      providesTags: ["AdminProducts"],
     }),
 
     createProduct: builder.mutation({
@@ -102,8 +102,24 @@ export const productApi = createApi({
 
       invalidatesTags: ["AdminProducts"],
     }),
+
+    getProductReviews: builder.query({
+      query: (productId) => `/reviews?id=${productId}`,
+      providesTags: ["Reviews"],
+    }),
+
+    deleteReview: builder.mutation({
+      query({ productId, id }) {
+        return {
+          url: `/admin/reviews?productId=${productId}&id=${id}`,
+          method: "DELETE",
+        };
+      },
+
+      invalidatesTags: ["Reviews"],
+    }),
   }),
 });
 
 
-export const { useGetProductsQuery, useGetProductDetailsQuery, useSubmitReviewMutation, useCanUserReviewQuery, useGetAdminProductsQuery, useCreateProductMutation, useUpdateProductMutation, useUploadProductImagesMutation, useDeleteProductImagesMutation, useDeleteProductMutation } = productApi ;
+export const { useGetProductsQuery, useGetProductDetailsQuery, useSubmitReviewMutation, useCanUserReviewQuery, useGetAdminProductsQuery, useCreateProductMutation, useUpdateProductMutation, useUploadProductImagesMutation, useDeleteProductImagesMutation, useDeleteProductMutation, useLazyGetProductReviewsQuery, useDeleteReviewMutation } = productApi ;
